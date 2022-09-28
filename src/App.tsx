@@ -1,18 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import { PeopleList } from './components/PeopleList';
+import { SearchInput } from './components/SearchInput';
 import { usePeople } from './hook/usePeople';
+import Spinner from 'react-bootstrap/Spinner';
+
+
+
 
 function App() {
 
-
-  const { peopleList } = usePeople();
-
-  console.log(peopleList)
+  const { isLoading } = usePeople()
 
   return (
-    <div className="App">
-        <h1>Hola mundo</h1>
-    </div>
+    <>
+
+      <div>
+        <PeopleList />
+      </div>
+
+
+    </>
   );
 }
 
