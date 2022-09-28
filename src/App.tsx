@@ -1,24 +1,21 @@
 import './App.css';
 import { PeopleList } from './components/PeopleList';
-import { SearchInput } from './components/SearchInput';
-import { usePeople } from './hook/usePeople';
 import Spinner from 'react-bootstrap/Spinner';
+import { Image } from "react-bootstrap";
 
 
 
 
 function App() {
 
-  const { isLoading } = usePeople()
-
   return (
     <>
-
+      <Image
+        src="https://cdn.goodvinilos.com/61003/vinilo-logo-star-wars.jpg"
+      />
       <div>
         <PeopleList />
       </div>
-
-
     </>
   );
 }

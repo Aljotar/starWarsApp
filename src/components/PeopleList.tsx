@@ -1,10 +1,11 @@
-import { height } from '@mui/system';
 import Card from 'react-bootstrap/Card';
-import { usePeople } from '../hook/usePeople';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { classApi } from '../api/consultApi';
 import { PeopleData, PeopleResponse } from '../interface/people';
 import { Button } from 'react-bootstrap';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
+
 
 
 export const PeopleList = () => {
@@ -12,19 +13,33 @@ export const PeopleList = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [peopleList, setPeopleListt] = useState<PeopleData[]>([])
     const [pages, setPages] = useState(1)
+    const [searchPeople, setSearchPeople] = useState('')
 
     const url = `https://swapi.dev/api/people/?page=${pages}`;
 
-    const loadPeople = async () => {
-        setIsLoading(false);
-        const resp = await classApi.get<PeopleResponse>(url);
-        setPeopleListt(resp.data.results)
-        setIsLoading(false)
 
-    }
+
     useEffect(() => {
-        loadPeople();
-    }, [pages])
+        const loadPeople = async () => {
+            setIsLoading(false);
+            const resp = await classApi.get<PeopleResponse>(url);
+            setPeopleListt(resp.data.results)
+            setIsLoading(false)
+        }
+        loadPeople()
+        const auxArray = peopleList.filter((peop) => {
+            return peop.name.toLowerCase().includes(searchPeople.toLowerCase());
+        })
+        setPeopleListt(auxArray)
+        
+    }, [pages, searchPeople])
+
+    console.log(peopleList)
+    console.log(searchPeople)
+
+    const handleChange = (event: any) => {
+        setSearchPeople(event.target.value);
+    };
 
     const clickPagina = () => {
         setPages(pages - 1);
@@ -35,14 +50,21 @@ export const PeopleList = () => {
 
     return (
         <>
+            <InputGroup size="sm" className="mb-3">
+                <InputGroup.Text id="inputGroup-sizing-sm">Small</InputGroup.Text>
+                <Form.Control
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                    onChange={handleChange}
+                />
+            </InputGroup>
             {
                 peopleList.map((peopleList) => {
                     return (
-                        <Card style={{ width: '25rem', height: '10rem' }}>
+                        <Card className='cardStyle mb-3' style={{ width: '25rem', height: '10rem' }}>
                             <Card.Body>
                                 <Card.Title>{peopleList.name}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                                <Card.Text>{peopleList.height}</Card.Text>
+                                <Card.Text>{peopleList.species}</Card.Text>
                             </Card.Body>
                         </Card>
                     )
